@@ -1,6 +1,3 @@
-#Git autocompletion
-source ~/.git-completion.bash
-
 #Show git branch in prompt
 function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
@@ -23,46 +20,44 @@ function proml {
     ;;
   esac
 PS1="${TITLEBAR}\
-$BLUE[$RED\u@\h:\W$GREEN\$(parse_git_branch)$BLUE]\
+$RED\W$GREEN\$(parse_git_branch) \
 $GREEN\$ "
 PS2='> '
 PS4='+ '
 }
 proml
 
-# Setting PATH for Python 2.7
-# The orginal version is saved in .bash_profile.pysave
-PYTHONPATH=""
-PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/lib/node_modules/jasmine-node/bin:${PATH}"
-export PATH
-SCALA_HOME="/System/Library/Scala/scala-2.9.0.1"
-PATH=$SCALA_HOME/bin:$PATH
-export PATH
 
-GOOGLE_APP_ENGINE="/usr/local/google_appengine"
-export GOOGLE_APP_ENGINE
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
+source ~/.profile
 
-NODE_PATH="/usr/lib/node_modules:${NODE_PATH}"
-export NODE_PATH
+alias ll="ls -alh"
+alias xc="open *.xcworkspace"
+alias be="bundle exec"
+alias dc="docker-compose"
+alias dm="docker-machine"
 
-if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
-	
-export LSCOLORS=gxfxcxdxbxegedabagacad
-export LS_OPTIONS='-G'
-alias ls='ls $LS_OPTIONS'
-alias ll='ls $LS_OPTIONS -al'	
-alias cdbo='cd ~/Documents/Shopkeep/repos/backoffice'
-alias cdipad='cd ~/Documents/Shopkeep/repos/ipad-register'
+function ssbt {
+ echo "sbt -shell "$@" shell"
+  sbt -shell "$@" shell
+}
 
-MYSQL_BIN="/usr/local/mysql/bin"
-PATH=$PATH:$MYSQL_BIN
+export PATH="$PATH:$HOME/bin"
 
-##
-# Your previous /Users/Luis/.bash_profile file was backed up as /Users/Luis/.bash_profile.macports-saved_2011-11-03_at_18:49:18
-##
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.99.100:2376"
+export DOCKER_CERT_PATH="/Users/luis/.docker/machine/machines/default"
+export DOCKER_MACHINE_NAME="default"
 
-# MacPorts Installer addition on 2011-11-03_at_18:49:18: adding an appropriate PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
+complete -C aws_completer aws
 
+export EDITOR="subl -w"
+
+source '/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
+source '/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
+
+export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
